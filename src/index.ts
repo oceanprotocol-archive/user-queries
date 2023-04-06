@@ -5,7 +5,8 @@ interface User {
   address: string
 }
 
-const endpoint = 'https://api.thegraph.com/subgraphs/name/<subgraph-name>'
+const endpoint =
+  'https://v4.subgraph.mainnet.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph'
 
 export default async function run() {
   const userArray: User[] = users as User[]
@@ -13,16 +14,19 @@ export default async function run() {
   for (const user of userArray) {
     const query = gql`
       query {
-        veOCEAN(id: ${user.address}) {
+        veOCEAN(id: "${user.address}") {
           id
-          lockedAmount
+          lockedAmount,
+          allocation {
+            allocatedTotal
+          }
         }
       }
     `
 
     try {
-      const data = await request(endpoint, query)
-      console.log(data)
+      const data: any = await request(endpoint, query)
+      console.log(data.veOCEAN.lockedAmount)
     } catch (err) {
       console.error(err)
     }
