@@ -1,6 +1,11 @@
-import { request, gql } from 'graphql-request';
+import { request, gql } from 'graphql-request'
+import users from './users.json'
 
-const endpoint = 'https://api.thegraph.com/subgraphs/name/<subgraph-name>';
+interface User {
+  address: string
+}
+
+const endpoint = 'https://api.thegraph.com/subgraphs/name/<subgraph-name>'
 
 const query = gql`
   query Tokens {
@@ -9,18 +14,19 @@ const query = gql`
       name
     }
   }
-`;
+`
 
 async function run() {
-  while (true) {
+  const userArray: User[] = users as User[]
+
+  for (const user of userArray) {
     try {
-      const data = await request(endpoint, query);
-      console.log(data.tokens);
+      const data = await request(endpoint, query)
+      console.log(data.tokens)
     } catch (err) {
-      console.error(err);
+      console.error(err)
     }
-    await new Promise(resolve => setTimeout(resolve, 1000));
   }
 }
 
-run();
+run()

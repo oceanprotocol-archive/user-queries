@@ -45,4 +45,4 @@ jobs:
           key: ${{ runner.os }}-lint-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: ${{ runner.os }}-lint-${{ env.cache-name }}-
       - run: npm ci
-      - run: npm run test:integration
+      - run: npm run test

@@ -4,7 +4,10 @@
   "description": "Script to query the subgraph for user information",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "lint": "eslint --ignore-path .gitignore --ext .js --ext .ts --ext .tsx . && npm run type-check",
+    "clean": "rm -rf ./dist",
+    "format": "prettier --ignore-path .gitignore './**/*.{css,yml,js,ts,tsx,json}' --write",
+    "test:format": "npm run format && npm run lint"
   },
   "repository": {
     "type": "git",
@@ -18,5 +21,16 @@
   "homepage": "https://github.com/oceanprotocol/user-queries#readme",
   "dependencies": {
     "graphql-request": "^5.2.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^8.0.1",
+    "prettier": "^2.7.1",
+    "pretty-quick": "^3.1.3",
+    "typescript": "4.8.4"
   }
 }
