@@ -1,53 +1,65 @@
 import { request, gql } from 'graphql-request'
-import fs from 'fs'
 import users from './users.json'
+import { getBlockNumberXDaysAgo, saveOutput } from './utils'
+import { User, Output } from './types'
 
-interface User {
-  address: string
-}
-
+const days = [0, 30, 60, 90, 180, 360]
 const endpoint =
   'https://v4.subgraph.mainnet.oceanprotocol.com/subgraphs/name/oceanprotocol/ocean-subgraph'
 
-function saveOutput(jsonData: any) {
-  const jsonString = JSON.stringify(jsonData, null, 2)
-
-  fs.writeFile('output.json', jsonString, (err) => {
-    if (err) {
-      console.error('Error writing JSON data to file:', err)
-    } else {
-      console.log('JSON data successfully written to file')
-    }
-  })
-}
 export default async function run() {
   const userArray: User[] = users as User[]
-  const output: any = []
+  const output: Output[] = [] as Output[]
+  const currentBlock: any = await request(
+    endpoint,
+    gql`
+      {
+        _meta {
+          block {
+            number
+          }
+        }
+      }
+    `
+  )
 
-  for (const user of userArray) {
-    const query = gql`
+  const blockNumber30DaysAgo = getBlockNumberXDaysAgo(
+    days,
+    currentBlock._meta.block.number
+  )
+  console.log(blockNumber30DaysAgo)
+
+  for (let i = 0; i < userArray.length; i++) {
+    for (const blockNumber of blockNumber30DaysAgo) {
+      const query = gql`
       query {
-        nfts(where:{creator: "${user.address}"}){
+        nfts(where:{creator: "${userArray[i].address}", block: ${blockNumber}}){
           id,
-          name
+          block
         },
-        veOCEAN(id: "${user.address}") {
+        veOCEAN(id: "${userArray[i].address}", where: {block: ${blockNumber}}) {
           id
           lockedAmount,
+          block,
           allocation {
             allocatedTotal
           }
         }
       }
     `
-    try {
-      const data: any = await request(endpoint, query)
-      console.log(data.nfts[0]?.name, data.veOCEAN?.lockedAmount)
-      output.push(data)
-    } catch (err) {
-      console.error(err)
+      try {
+        if (!output[i]) {
+          output[i] = { userAddress: userArray[i].address, data: [] }
+        }
+        const data: any = await request(endpoint, query)
+        console.log(data.nfts[0]?.name, data.veOCEAN?.lockedAmount)
+        output[i].data.push(data)
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
+
   saveOutput(output)
 }
 
