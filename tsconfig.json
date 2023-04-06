@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "outDir": "./build/",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "strict": true,
-    "noEmit": true,
-    "module": "esnext",
+    "module": "commonjs",
+    "target": "es2019",
     "moduleResolution": "node",
-    "isolatedModules": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "outDir": "./build/",
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
