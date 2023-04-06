@@ -7,22 +7,22 @@ interface User {
 
 const endpoint = 'https://api.thegraph.com/subgraphs/name/<subgraph-name>'
 
-const query = gql`
-  query Tokens {
-    tokens {
-      id
-      name
-    }
-  }
-`
-
-async function run() {
+export default async function run() {
   const userArray: User[] = users as User[]
 
   for (const user of userArray) {
+    const query = gql`
+      query {
+        veOCEAN(id: ${user.address}) {
+          id
+          lockedAmount
+        }
+      }
+    `
+
     try {
       const data = await request(endpoint, query)
-      console.log(data.tokens)
+      console.log(data)
     } catch (err) {
       console.error(err)
     }
