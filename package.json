@@ -1,0 +1,22 @@
+{
+  "name": "user-queries",
+  "version": "1.0.0",
+  "description": "Script to query the subgraph for user information",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oceanprotocol/user-queries.git"
+  },
+  "author": "Ocean Protocol Foundation",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/oceanprotocol/user-queries/issues"
+  },
+  "homepage": "https://github.com/oceanprotocol/user-queries#readme",
+  "dependencies": {
+    "graphql-request": "^5.2.0"
+  }
+}
