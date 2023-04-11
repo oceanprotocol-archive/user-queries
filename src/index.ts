@@ -49,7 +49,10 @@ export default async function run() {
     `
       try {
         if (!output[i]) {
-          output[i] = { userAddress: userArray[i].address, data: [] }
+          output[i] = {
+            userAddress: userArray[i].address,
+            data: []
+          }
         }
         const data: any = await request(endpoint, query)
         console.log(data.nfts[0]?.name, data.veOCEAN?.lockedAmount)
